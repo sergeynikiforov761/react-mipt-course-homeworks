@@ -1,0 +1,75 @@
+.sign_in {
+    width: 100%;
+    height: 100vh;
+}
+
+.header {
+    height: 8vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2% 0 2%;
+    background-color: #b0bec5;
+    box-shadow: 0 15px 30px 4px rgba(0,0,0,0.5);
+    font-weight: 600;
+    cursor: default;
+}
+
+.main {
+    height: 92vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.form_block {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    height: 50vh;
+    background-color: #eceff1;
+    box-shadow: 0 15px 30px 4px rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.form {
+    width: 100%;
+}
+
+.form_group {
+    font-weight: 600;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 4vh;
+    padding: 3% 15% 3% 15%;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding-top: 5%;
+}
+
+.btn {
+    width: 20%;
+    height: 4vh;
+    box-shadow: 0 5px 10px 2px rgba(0,0,0,0.5);
+    font-weight: 600;
+}
+
+.form_control {
+    width: 50%;
+    padding: 0 3% 0 3%;
+    font-weight: 400;
+}
+
+.title_form {
+    padding-bottom: 5%;
+    font-size: 130%;
+    font-weight: 600;
+}
