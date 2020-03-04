@@ -166,7 +166,7 @@ export class SignUp extends React.Component {
                                 <button type="submit" className={css.btn}>Send</button>
                                 <button type="submit" className={css.btn}>Cancel</button>
                             </div>
-                            {this.state.errorMessage !== '' && <ErrorMessage password={this.state.errorMessage}/>}
+                            {this.state.errorMessage !== '' && <ErrorMessage error={this.state.errorMessage}/>}
                         </form>
                     </div>
                 </main>
