@@ -10,7 +10,8 @@ export class SignIn extends React.Component{
             form: {
                 email: '',
                 password: ''
-            }
+            },
+            responseStatus: ''
         }
     }
 
@@ -35,14 +36,18 @@ export class SignIn extends React.Component{
             },
             body: JSON.stringify(this.state.form)
         })
-            .then(response => response.json())
             .then(response => {
-                if(!response.status){
+                this.setState({
+                    responseStatus: response.status
+                });
+                return response.json();
+            })
+            .then(response => {
+                if(this.state.responseStatus === 200){
                     localStorage.setItem('TOKEN', response.accessToken);
                     this.props.onChangeFlag(true);
                     customHistory.push('/dashboard');
                 } else {
-                    console.log('ERROR: ', response);
                 }
             })
             .catch(error => console.log('ERROR: ', error.message));
