@@ -1,4 +1,13 @@
 .main {
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 600%;
+    height: 5vh;
     position: absolute;
-    background-color: darkred;
+    right: -650%;
+    top: -120%;
+
+    background-color: #f44336;
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import css from "./SignIn.module.css";
 import {customHistory} from "../../App";
+import InputErrorValidation from "../../images/InputErrorValidationImage";
 
 export class SignIn extends React.Component{
     constructor(props) {
@@ -11,7 +12,11 @@ export class SignIn extends React.Component{
                 email: '',
                 password: ''
             },
-            responseStatus: ''
+            responseStatus: '',
+            errorValidation: {
+                email: '',
+                password: ''
+            }
         }
     }
 
@@ -24,34 +29,49 @@ export class SignIn extends React.Component{
       })
     };
 
+
     onSubmit = (event) => {
         if(event) {
             event.preventDefault();
         }
 
-        fetch('/auth/login', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(this.state.form)
-        })
-            .then(response => {
-                this.setState({
-                    responseStatus: response.status
-                });
-                return response.json();
+        if (this.props.isEmpty(this.state.form.password) && this.props.isEmpty(this.state.form.email)) {
+            fetch('/auth/login', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(this.state.form)
             })
-            .then(response => {
-                if(this.state.responseStatus === 200){
-                    localStorage.setItem('TOKEN', response.accessToken);
-                    this.props.onChangeFlag(true);
-                    customHistory.push('/dashboard');
-                } else {
-                }
-            })
-            .catch(error => console.log('ERROR: ', error.message));
+                .then(response => {
+                    this.setState({
+                        responseStatus: response.status
+                    });
+                    return response.json();
+                })
+                .then(response => {
+                    if (this.state.responseStatus === 200) {
+                        localStorage.setItem('TOKEN', JSON.stringify(response));
+                        this.props.onChangeFlag(true);
+                        customHistory.push('/dashboard');
+                    } else {
+                    }
+                })
+                .catch(error => console.log('ERROR: ', error.message));
+        }
+
+        const email = !this.props.isEmpty(this.state.form.email) ? 'Enter your email!' : '';
+        const password = !this.props.isEmpty(this.state.form.password) ? 'Enter your password!' : '';
+
+        this.setState({
+            errorValidation: {
+                email: email,
+                password: password
+            }
+        });
     };
+
+
 
     render() {
         return (
@@ -74,13 +94,15 @@ export class SignIn extends React.Component{
                         <form className={css.form} onSubmit={this.onSubmit}>
                             <div className={css.form_group}>
                                 <label htmlFor="inputEmail1">Email address:</label>
-                                <input type="email" className={css.form_control} name='email' value={this.state.email} onChange={this.onChange}
+                                <input type="text" className={css.form_control} name='email' value={this.state.email} onChange={this.onChange}
                                        aria-describedby="emailHelp" placeholder="Enter email"/>
+                                {this.state.errorValidation.email && <InputErrorValidation error={this.state.errorValidation.email}/>}
                             </div>
                             <div className={css.form_group}>
                                 <label htmlFor="inputPassword1">Password:</label>
                                 <input type="password" className={css.form_control} name='password' value={this.state.password} onChange={this.onChange}
                                        placeholder="Password"/>
+                                {this.state.errorValidation.email && <InputErrorValidation error={this.state.errorValidation.password}/>}
                             </div>
                             <div className={css.buttons}>
                                 <button type="submit" className={css.btn}>Send</button>

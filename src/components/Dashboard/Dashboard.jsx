@@ -5,6 +5,10 @@ import {customHistory} from "../../App";
 export class Dashboard extends React.Component{
     constructor(props) {
         super(props);
+
+        this.state = {
+            items: []
+        }
     }
 
     onLogout = () => {
@@ -12,6 +16,15 @@ export class Dashboard extends React.Component{
         this.props.onChangeFlag(false);
         customHistory.push('/signIn')
     };
+
+    componentDidMount() {
+        fetch('/board')
+            .then(response => response.json())
+            .then(response => {
+                this.setState({items: response});
+            })
+            .catch(error => console.log(error.message));
+    }
 
     render() {
         return (
@@ -25,40 +38,40 @@ export class Dashboard extends React.Component{
                     </div>
                 </header>
                 <main className={css.main}>
-                    <div className={css.buttons}>
-
-                    </div>
-                    <div>
-                        <table className="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Имя</th>
-                                <th scope="col">Фамилия</th>
-                                <th scope="col">Username</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>@twitter</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div className={css.button_and_table}>
+                        <div>
+                            <table className='table'>
+                                <thead>
+                                <tr className="table-active">
+                                    <th scope="col"> </th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Owner</th>
+                                    <th scope="col">Key</th>
+                                    <th scope="col">Category</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {this.state.items.map(item => (
+                                    <tr>
+                                        <td className={css.td_img}>
+                                            <img className={css.img} src={item.icon.value}/>
+                                        </td>
+                                        <td>{item.title}</td>
+                                        <td>{item.owner.name}</td>
+                                        <td>{item.key}</td>
+                                        <td>{item.category.value}</td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className={css.fieldButtons} onClick={() => {
+                            customHistory.push('/createBoard')
+                        }}>
+                            <button className={css.btn}>
+                                Создать запись
+                            </button>
+                        </div>
                     </div>
                 </main>
             </div>
