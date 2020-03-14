@@ -61,7 +61,7 @@ export class SignUp extends React.Component {
                         customHistory.push('/dashboard');
                     } else {
                         this.setState({
-                            errorMessage: response
+                            errorMessage: response.message
                         })
                     }
                 })

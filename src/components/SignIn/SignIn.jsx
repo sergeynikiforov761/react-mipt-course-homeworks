@@ -2,8 +2,9 @@ import React from "react";
 import css from "./SignIn.module.css";
 import {customHistory} from "../../App";
 import InputErrorValidation from "../../images/InputErrorValidationImage";
+import {ErrorMessage} from "../Errors/ErrorMessage/ErrorMessage";
 
-export class SignIn extends React.Component{
+export class SignIn extends React.Component {
     constructor(props) {
         super(props);
 
@@ -13,25 +14,26 @@ export class SignIn extends React.Component{
                 password: ''
             },
             responseStatus: '',
+            errorMessage: '',
             errorValidation: {
                 email: '',
                 password: ''
             }
-        }
+        };
     }
 
     onChange = (event) => {
-      this.setState({
-          form: {
-              ...this.state.form,
-              [event.target.name]: event.target.value
-          }
-      })
+        this.setState({
+            form: {
+                ...this.state.form,
+                [event.target.name]: event.target.value
+            }
+        });
     };
 
 
     onSubmit = (event) => {
-        if(event) {
+        if (event) {
             event.preventDefault();
         }
 
@@ -55,9 +57,17 @@ export class SignIn extends React.Component{
                         this.props.onChangeFlag(true);
                         customHistory.push('/dashboard');
                     } else {
+                        this.setState({
+                            errorMessage: response.message
+                        });
+
                     }
                 })
-                .catch(error => console.log('ERROR: ', error.message));
+                .catch(error => {
+                    this.setState({
+                        errorMessage: error.message
+                    });
+                });
         }
 
         const email = !this.props.isEmpty(this.state.form.email) ? 'Enter your email!' : '';
@@ -70,7 +80,6 @@ export class SignIn extends React.Component{
             }
         });
     };
-
 
 
     render() {
@@ -94,20 +103,25 @@ export class SignIn extends React.Component{
                         <form className={css.form} onSubmit={this.onSubmit}>
                             <div className={css.form_group}>
                                 <label htmlFor="inputEmail1">Email address:</label>
-                                <input type="text" className={css.form_control} name='email' value={this.state.email} onChange={this.onChange}
+                                <input type="text" className={css.form_control} name='email' value={this.state.email}
+                                       onChange={this.onChange}
                                        aria-describedby="emailHelp" placeholder="Enter email"/>
-                                {this.state.errorValidation.email && <InputErrorValidation error={this.state.errorValidation.email}/>}
+                                {this.state.errorValidation.email &&
+                                <InputErrorValidation error={this.state.errorValidation.email}/>}
                             </div>
                             <div className={css.form_group}>
                                 <label htmlFor="inputPassword1">Password:</label>
-                                <input type="password" className={css.form_control} name='password' value={this.state.password} onChange={this.onChange}
+                                <input type="password" className={css.form_control} name='password'
+                                       value={this.state.password} onChange={this.onChange}
                                        placeholder="Password"/>
-                                {this.state.errorValidation.email && <InputErrorValidation error={this.state.errorValidation.password}/>}
+                                {this.state.errorValidation.email &&
+                                <InputErrorValidation error={this.state.errorValidation.password}/>}
                             </div>
                             <div className={css.buttons}>
                                 <button type="submit" className={css.btn}>Send</button>
                                 <button type="submit" className={css.btn}>Cancel</button>
                             </div>
+                            {this.state.errorMessage && <ErrorMessage error={this.state.errorMessage}/>}
                         </form>
                     </div>
                 </main>

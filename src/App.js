@@ -6,6 +6,7 @@ import {Dashboard} from "./components/Dashboard/Dashboard";
 import {SignIn} from "./components/SignIn/SignIn";
 import {SignUp} from "./components/SignUp/SignUp";
 import {CreateBoard} from "./components/CreateBoard/CreateBoard";
+import {Preloader} from "./components/Preloader/Preloader";
 
 export const customHistory = createBrowserHistory();
 
@@ -15,6 +16,7 @@ class App extends React.Component {
 
         this.state = {
             loggedIn: false,
+            stateFetch: false
         }
     }
 
@@ -29,6 +31,12 @@ class App extends React.Component {
         this.setState({loggedIn})
     };
 
+    isFetching = (fetching) => {
+        this.setState({
+            stateFetch: fetching
+        });
+    };
+
     isEmpty = (str) => {
         return str.trim() !== '';
     };
@@ -38,8 +46,8 @@ class App extends React.Component {
             <Router history={customHistory}>
                 <div className={css.main}>
                     {this.state.loggedIn && <Switch>
-                        <Route path='/dashboard' render={() => <Dashboard onChangeFlag={this.onChangeFlag}/>}/>
-                        <Route path='/createBoard' render={() => <CreateBoard onChangeFlag={this.onChangeFlag}/>}/>
+                        <Route path='/dashboard' render={() => <Dashboard onChangeFlag={this.onChangeFlag} stateFetch={this.state.stateFetch} isFetching={this.isFetching}/>}/>
+                        <Route path='/createBoard' render={() => <CreateBoard isEmpty={this.isEmpty} stateFetch={this.state.stateFetch} isFetching={this.isFetching}/>}/>
                         <Redirect to='/dashboard'/>
                     </Switch>}
                     {!this.state.loggedIn && <Switch>

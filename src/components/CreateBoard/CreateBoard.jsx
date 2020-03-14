@@ -3,6 +3,7 @@ import css from './CreateBoard.module.css';
 import {customHistory} from "../../App";
 import InputErrorValidation from "../../images/InputErrorValidationImage";
 import {ErrorMessage} from "../Errors/ErrorMessage/ErrorMessage";
+import {Preloader} from "../Preloader/Preloader";
 
 export class CreateBoard extends React.Component {
     constructor(props) {
@@ -29,7 +30,8 @@ export class CreateBoard extends React.Component {
                 title: '',
                 key: '',
             },
-            errorMessage: ''
+            errorMessage: '',
+            responseStatus: ''
         }
     }
 
@@ -45,20 +47,25 @@ export class CreateBoard extends React.Component {
                     }
                 });
             })
-            .catch(error => console.log(error.message));
+            .catch(error => {
+                this.setState({errorMessage: error.message});
+            });
 
         fetch('/dictionaries/board-icons')
             .then(response => response.json())
             .then(response => {
-                console.log(response)
                 this.setState({
                     formGet: {
                         ...this.state.formGet,
                         icon: response
                     }
                 });
+                this.props.isFetching(false);
             })
-            .catch(error => console.log(error.message));
+            .catch(error => {
+                this.setState({errorMessage: error.message});
+                this.props.isFetching(false);
+            });
     }
 
     onChange = (event) => {
@@ -71,7 +78,7 @@ export class CreateBoard extends React.Component {
                 ...this.state.formPost,
                 [event.target.name]: event.target.value
             }
-        })
+        });
     };
 
     onChangeCategoryAndIcon = (event) => {
@@ -88,7 +95,7 @@ export class CreateBoard extends React.Component {
                         value: event.target.value,
                     }
                 }
-            })
+            });
         }
 
         if (event.target.name === "icon") {
@@ -100,7 +107,7 @@ export class CreateBoard extends React.Component {
                         value: event.target.value,
                     }
                 }
-            })
+            });
         }
     };
 
@@ -122,8 +129,8 @@ export class CreateBoard extends React.Component {
         }
     };
 
-    checkLifeToken = () => {
-        if (JSON.parse(localStorage.getItem('TOKEN')).accessTokenExpiresIn > Date.now()) {
+    checkLifeToken = (getToken) => {
+        if (getToken.accessTokenExpiresIn > Date.now()) {
             return Promise.resolve();
         } else {
             return fetch('/auth/update-tokens', {
@@ -131,7 +138,7 @@ export class CreateBoard extends React.Component {
                 headers: {
                     'content-type': 'application/json'
                 },
-                body: JSON.stringify({refreshToken: JSON.parse(localStorage.getItem('TOKEN')).refreshToken})
+                body: JSON.stringify({refreshToken: getToken.refreshToken})
             })
                 .then(response => response.json())
                 .then(response => {
@@ -140,35 +147,63 @@ export class CreateBoard extends React.Component {
                 })
                 .catch(error => {
                     localStorage.removeItem('TOKEN');
-                    console.log(error.message);
-                })
+                    this.setState({errorMessage: error.message});
+                });
         }
     };
 
-    onSubmit = () => {
-        this.checkLifeToken()
+    onSubmit = (event) => {
+        if (event) {
+            event.preventDefault();
+        }
+
+        let getToken = JSON.parse(localStorage.getItem('TOKEN'));
+        this.checkLifeToken(getToken)
             .then(() => {
                 return fetch('/board', {
                     method: 'POST',
                     headers: {
                         'content-type': 'application/json',
-                        Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('TOKEN')).accessToken,
+                        Authorization: 'Bearer ' + getToken.accessToken,
                     },
                     body: JSON.stringify(this.state.formPost)
                 })
             })
-            .then(response => response.json())
             .then(response => {
-                if (response.status !== 200) {
-                    this.setState({errorMessage: response.message});
+                this.setState({
+                    responseStatus: response.status
+                });
+                return response.json();
+            })
+            .then(response => {
+                if (this.state.responseStatus === 200) {
+                    customHistory.push('/dashboard');
                 } else {
-                    return customHistory.push('/dashboard');
+                    this.setState({
+                        errorMessage: response.message
+                    });
                 }
             })
             .catch(error => {
-                console.log("error ", error);
-                this.setState({errorMessage: error.message});
-            })
+                this.setState({
+                    errorMessage: error.message
+                });
+            });
+
+        let key = '';
+        if (!this.props.isEmpty(this.state.formPost.key)) {
+            key = 'Enter your key!';
+        } else if (this.state.formPost.key !== this.state.formPost.key.toUpperCase()) {
+            key = 'All letters must be uppercase';
+        }
+        const title = !this.props.isEmpty(this.state.formPost.title) ? 'Enter your title!' : '';
+
+        this.setState({
+            errorValidation: {
+                title: title,
+                key: key
+            }
+        });
     };
 
     render() {
@@ -188,18 +223,22 @@ export class CreateBoard extends React.Component {
                     <div className={css.form_block}>
                         <form className={css.form}
                               onSubmit={this.onSubmit}>    {/*Почему onSubmit пишем здесь а не у кнопки, как он понимает к какой из кнопки относится это событие*/}
-                            <div className={css.form_group}>
+                            <div className={css.form_group}>    {/*Первое поле*/}
                                 <label htmlFor="title">Title:</label>
                                 <input type="text" className={css.form_control} name='title'
                                        value={this.state.formPost.title}
                                        onChange={this.onChange}
                                        placeholder="Title"/>
+                                {this.state.errorValidation.title &&
+                                <InputErrorValidation error={this.state.errorValidation.title}/>}
                             </div>
-                            <div className={css.form_group}>
+                            <div className={css.form_group}>       {/*Второе поле*/}
                                 <label htmlFor="key">Key:</label>
                                 <input type="text" className={css.form_control} name='key'
                                        value={this.state.formPost.key} onChange={this.onChange}
                                        placeholder="Key"/>
+                                {this.state.errorValidation.key &&
+                                <InputErrorValidation error={this.state.errorValidation.key}/>}
                             </div>
                             <div className={css.form_group}>   {/*Третье поле*/}
                                 <label htmlFor="category">Categories:</label>

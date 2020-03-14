@@ -3,8 +3,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    padding: 10%;
     width: 600%;
-    height: 5vh;
+    height: 6vh;
     position: absolute;
     right: -650%;
     top: -120%;
