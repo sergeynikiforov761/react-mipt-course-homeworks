@@ -1,9 +1,9 @@
 import React from "react";
 import css from "./SignIn.module.css";
 import {customHistory} from "../../App";
-import InputErrorValidation from "../../images/InputErrorValidationImage";
 import {ErrorMessage} from "../Errors/ErrorMessage/ErrorMessage";
 import {isEmpty} from "../../utils/isEmptyFeild";
+import {ErrorValidation} from "../Errors/ErrorValidation/ErrorValidation";
 
 export class SignIn extends React.Component {
     constructor(props) {
@@ -96,7 +96,7 @@ export class SignIn extends React.Component {
                                        onChange={this.onChange}
                                        aria-describedby="emailHelp" placeholder="Enter email"/>
                                 {this.state.errorValidation.email &&
-                                <InputErrorValidation error={this.state.errorValidation.email}/>}
+                                <ErrorValidation error={this.state.errorValidation.email}/>}
                             </div>
                             <div className={css.form_group}>
                                 <label htmlFor="inputPassword1">Password:</label>
@@ -104,7 +104,7 @@ export class SignIn extends React.Component {
                                        value={this.state.password} onChange={this.onChange}
                                        placeholder="Password"/>
                                 {this.state.errorValidation.email &&
-                                <InputErrorValidation error={this.state.errorValidation.password}/>}
+                                <ErrorValidation error={this.state.errorValidation.password}/>}
                             </div>
                             <div className={css.buttons}>
                                 <button type="submit" className={css.btn}>Send</button>

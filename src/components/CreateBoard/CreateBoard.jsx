@@ -1,10 +1,9 @@
 import React from "react";
 import css from './CreateBoard.module.css';
 import {customHistory} from "../../App";
-import InputErrorValidation from "../../images/InputErrorValidationImage";
 import {ErrorMessage} from "../Errors/ErrorMessage/ErrorMessage";
-import {Preloader} from "../Preloader/Preloader";
 import {isEmpty} from "../../utils/isEmptyFeild";
+import {ErrorValidation} from "../Errors/ErrorValidation/ErrorValidation";
 
 export class CreateBoard extends React.Component {
     constructor(props) {
@@ -205,7 +204,7 @@ export class CreateBoard extends React.Component {
                                        onChange={this.onChange}
                                        placeholder="Title"/>
                                 {this.state.errorValidation.title &&
-                                <InputErrorValidation error={this.state.errorValidation.title}/>}
+                                <ErrorValidation error={this.state.errorValidation.title}/>}
                             </div>
                             <div className={css.form_group}>       {/*Второе поле*/}
                                 <label htmlFor="key">Key:</label>
@@ -213,7 +212,7 @@ export class CreateBoard extends React.Component {
                                        value={this.state.formPost.key} onChange={this.onChange}
                                        placeholder="Key"/>
                                 {this.state.errorValidation.key &&
-                                <InputErrorValidation error={this.state.errorValidation.key}/>}
+                                <ErrorValidation error={this.state.errorValidation.key}/>}
                             </div>
                             <div className={css.form_group}>   {/*Третье поле*/}
                                 <label htmlFor="category">Categories:</label>

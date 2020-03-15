@@ -2,9 +2,8 @@ import React from "react";
 import css from "./SignUp.module.css";
 import {customHistory} from "../../App";
 import {ErrorMessage} from "../Errors/ErrorMessage/ErrorMessage";
-import {ErrorValidation} from "../Errors/ErrorValidation/ErrorValidation";
-import InputErrorValidation from "../../images/InputErrorValidationImage";
 import {isEmpty} from "../../utils/isEmptyFeild";
+import {ErrorValidation} from "../Errors/ErrorValidation/ErrorValidation";
 
 export class SignUp extends React.Component {
     constructor(props) {
@@ -106,7 +105,7 @@ export class SignUp extends React.Component {
                                        onChange={this.onChange}
                                        placeholder="First name"/>
                                 {this.state.errorValidation.name &&
-                                <InputErrorValidation error={this.state.errorValidation.name}/>}
+                                <ErrorValidation error={this.state.errorValidation.name}/>}
                             </div>
                             <div className={css.form_group}>
                                 <label htmlFor="email">Email address:</label>
@@ -114,7 +113,7 @@ export class SignUp extends React.Component {
                                        value={this.state.form.email} onChange={this.onChange}
                                        placeholder="Email address"/>
                                 {this.state.errorValidation.email &&
-                                <InputErrorValidation error={this.state.errorValidation.email}/>}
+                                <ErrorValidation error={this.state.errorValidation.email}/>}
                             </div>
                             <div className={css.form_group}>
                                 <label htmlFor="password">Password:</label>
@@ -122,7 +121,7 @@ export class SignUp extends React.Component {
                                        value={this.state.form.password} onChange={this.onChange}
                                        placeholder="Password"/>
                                 {this.state.errorValidation.password &&
-                                <InputErrorValidation error={this.state.errorValidation.password}/>}
+                                <ErrorValidation error={this.state.errorValidation.password}/>}
                             </div>
                             <div className={css.form_group}>
                                 <label htmlFor="repeatPassword">Repeat password:</label>

@@ -1,5 +1,9 @@
 .main {
-    font-weight: 600;
+    position: absolute;
+    right: 16%;
+}
+
+.block {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,6 +14,26 @@
     position: absolute;
     right: -650%;
     top: -120%;
-
+    font-weight: 600;
     background-color: #f44336;
+}
+
+.svg_block .block {
+    display: none;
+    animation: animate .7s ease-in-out;
+}
+
+.svg_block:hover .block {
+    display: flex;
+}
+
+@keyframes animate {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+
 }
