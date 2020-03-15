@@ -37,22 +37,18 @@ class App extends React.Component {
         });
     };
 
-    isEmpty = (str) => {
-        return str.trim() !== '';
-    };
-
     render() {
         return (
             <Router history={customHistory}>
                 <div className={css.main}>
                     {this.state.loggedIn && <Switch>
                         <Route path='/dashboard' render={() => <Dashboard onChangeFlag={this.onChangeFlag} stateFetch={this.state.stateFetch} isFetching={this.isFetching}/>}/>
-                        <Route path='/createBoard' render={() => <CreateBoard isEmpty={this.isEmpty} stateFetch={this.state.stateFetch} isFetching={this.isFetching}/>}/>
+                        <Route path='/createBoard' render={() => <CreateBoard stateFetch={this.state.stateFetch} isFetching={this.isFetching}/>}/>
                         <Redirect to='/dashboard'/>
                     </Switch>}
                     {!this.state.loggedIn && <Switch>
-                        <Route path='/signIn' render={() => <SignIn onChangeFlag={this.onChangeFlag} isEmpty={this.isEmpty}/>}/>
-                        <Route path='/signUp' render={() => <SignUp onChangeFlag={this.onChangeFlag} isEmpty={this.isEmpty}/>}/>
+                        <Route path='/signIn' render={() => <SignIn onChangeFlag={this.onChangeFlag}/>}/>
+                        <Route path='/signUp' render={() => <SignUp onChangeFlag={this.onChangeFlag}/>}/>
                         <Redirect to='/signIn'/>
                     </Switch>}
                 </div>

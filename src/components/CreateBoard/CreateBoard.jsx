@@ -4,6 +4,7 @@ import {customHistory} from "../../App";
 import InputErrorValidation from "../../images/InputErrorValidationImage";
 import {ErrorMessage} from "../Errors/ErrorMessage/ErrorMessage";
 import {Preloader} from "../Preloader/Preloader";
+import {isEmpty} from "../../utils/isEmptyFeild";
 
 export class CreateBoard extends React.Component {
     constructor(props) {
@@ -31,7 +32,6 @@ export class CreateBoard extends React.Component {
                 key: '',
             },
             errorMessage: '',
-            responseStatus: ''
         }
     }
 
@@ -90,10 +90,9 @@ export class CreateBoard extends React.Component {
             this.setState({
                 formPost: {
                     ...this.state.formPost,
-                    category: {
-                        key: this.helperOnChangeCategoryAndIcon(event),
-                        value: event.target.value,
-                    }
+                    category: this.state.formGet.category.find(
+                        item => item.value === event.target.value
+                    )
                 }
             });
         }
@@ -102,30 +101,11 @@ export class CreateBoard extends React.Component {
             this.setState({
                 formPost: {
                     ...this.state.formPost,
-                    icon: {
-                        key: this.helperOnChangeCategoryAndIcon(event),
-                        value: event.target.value,
-                    }
+                    icon: this.state.formGet.icon.find(
+                        item => item.value === event.target.value
+                    )
                 }
             });
-        }
-    };
-
-    helperOnChangeCategoryAndIcon = (event) => {      //Данная функция ищет ищет ключи тех обьектов чье значение совпадает с значением нашего поля"
-        if (event.target.name === 'category') {
-            for (let i = 0; i < this.state.formGet.category.length; i++) {
-                if (this.state.formGet.category[i].value === event.target.value) {
-                    return this.state.formGet.category[i].key;
-                }
-            }
-        }
-
-        if (event.target.name === 'icon') {
-            for (let i = 0; i < this.state.formGet.icon.length; i++) {
-                if (this.state.formGet.icon[i].value === event.target.value) {
-                    return this.state.formGet.icon[i].key;
-                }
-            }
         }
     };
 
@@ -157,46 +137,13 @@ export class CreateBoard extends React.Component {
             event.preventDefault();
         }
 
-        let getToken = JSON.parse(localStorage.getItem('TOKEN'));
-        this.checkLifeToken(getToken)
-            .then(() => {
-                return fetch('/board', {
-                    method: 'POST',
-                    headers: {
-                        'content-type': 'application/json',
-                        Authorization: 'Bearer ' + getToken.accessToken,
-                    },
-                    body: JSON.stringify(this.state.formPost)
-                })
-            })
-            .then(response => {
-                this.setState({
-                    responseStatus: response.status
-                });
-                return response.json();
-            })
-            .then(response => {
-                if (this.state.responseStatus === 200) {
-                    customHistory.push('/dashboard');
-                } else {
-                    this.setState({
-                        errorMessage: response.message
-                    });
-                }
-            })
-            .catch(error => {
-                this.setState({
-                    errorMessage: error.message
-                });
-            });
-
         let key = '';
-        if (!this.props.isEmpty(this.state.formPost.key)) {
+        if (!isEmpty(this.state.formPost.key)) {
             key = 'Enter your key!';
         } else if (this.state.formPost.key !== this.state.formPost.key.toUpperCase()) {
             key = 'All letters must be uppercase';
         }
-        const title = !this.props.isEmpty(this.state.formPost.title) ? 'Enter your title!' : '';
+        const title = !isEmpty(this.state.formPost.title) ? 'Enter your title!' : '';
 
         this.setState({
             errorValidation: {
@@ -204,6 +151,34 @@ export class CreateBoard extends React.Component {
                 key: key
             }
         });
+
+        if (isEmpty(this.state.formPost.title) && isEmpty(this.state.formPost.key)) {
+            let getToken = JSON.parse(localStorage.getItem('TOKEN'));
+            this.checkLifeToken(getToken)
+                .then(() => {
+                    return fetch('/board', {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json',
+                            Authorization: 'Bearer ' + getToken.accessToken,
+                        },
+                        body: JSON.stringify(this.state.formPost)
+                    })
+                })
+                .then(response => {
+                    if (response.status === 200) {
+                        return response.json();
+                    } else return Promise.reject();
+                })
+                .then(() => {
+                    customHistory.push('/dashboard');
+                })
+                .catch(error => {
+                    this.setState({
+                        errorMessage: error.message
+                    });
+                });
+        }
     };
 
     render() {

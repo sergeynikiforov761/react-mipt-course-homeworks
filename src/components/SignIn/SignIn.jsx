@@ -3,6 +3,7 @@ import css from "./SignIn.module.css";
 import {customHistory} from "../../App";
 import InputErrorValidation from "../../images/InputErrorValidationImage";
 import {ErrorMessage} from "../Errors/ErrorMessage/ErrorMessage";
+import {isEmpty} from "../../utils/isEmptyFeild";
 
 export class SignIn extends React.Component {
     constructor(props) {
@@ -13,7 +14,6 @@ export class SignIn extends React.Component {
                 email: '',
                 password: ''
             },
-            responseStatus: '',
             errorMessage: '',
             errorValidation: {
                 email: '',
@@ -31,13 +31,12 @@ export class SignIn extends React.Component {
         });
     };
 
-
     onSubmit = (event) => {
         if (event) {
             event.preventDefault();
         }
 
-        if (this.props.isEmpty(this.state.form.password) && this.props.isEmpty(this.state.form.email)) {
+        if (isEmpty(this.state.form.password) && isEmpty(this.state.form.email)) {
             fetch('/auth/login', {
                 method: 'POST',
                 headers: {
@@ -46,22 +45,13 @@ export class SignIn extends React.Component {
                 body: JSON.stringify(this.state.form)
             })
                 .then(response => {
-                    this.setState({
-                        responseStatus: response.status
-                    });
+                    console.log(response);
                     return response.json();
                 })
                 .then(response => {
-                    if (this.state.responseStatus === 200) {
-                        localStorage.setItem('TOKEN', JSON.stringify(response));
-                        this.props.onChangeFlag(true);
-                        customHistory.push('/dashboard');
-                    } else {
-                        this.setState({
-                            errorMessage: response.message
-                        });
-
-                    }
+                    localStorage.setItem('TOKEN', JSON.stringify(response));
+                    this.props.onChangeFlag(true);
+                    customHistory.push('/dashboard');
                 })
                 .catch(error => {
                     this.setState({
@@ -70,8 +60,8 @@ export class SignIn extends React.Component {
                 });
         }
 
-        const email = !this.props.isEmpty(this.state.form.email) ? 'Enter your email!' : '';
-        const password = !this.props.isEmpty(this.state.form.password) ? 'Enter your password!' : '';
+        const email = !isEmpty(this.state.form.email) ? 'Enter your email!' : '';
+        const password = !isEmpty(this.state.form.password) ? 'Enter your password!' : '';
 
         this.setState({
             errorValidation: {
@@ -80,7 +70,6 @@ export class SignIn extends React.Component {
             }
         });
     };
-
 
     render() {
         return (
