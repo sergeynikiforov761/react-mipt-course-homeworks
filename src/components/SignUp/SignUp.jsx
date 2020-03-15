@@ -20,6 +20,10 @@ export class SignUp extends React.Component {
                 name: '',
                 email: '',
                 password: '',
+
+                colorNameInput: '',
+                colorEmailInput: '',
+                colorPasswordInput: ''
             },
             errorMessage: ''
         }
@@ -39,17 +43,52 @@ export class SignUp extends React.Component {
             event.preventDefault(); //Что еще интересно можно узнать про методы событий
         }
 
-        this.state.form.password !== this.state.form.repeatPassword ? this.setState({errorMessage: 'Passwords do not match!'}) : this.setState({errorMessage: ''});
+        let name = '';
+        let colorNameInput = '';
+        if (!isEmpty(this.state.form.name)) {
+            name = 'Enter your name!';
+            colorNameInput = 'red';
+        } else {
+            name = '';
+            colorNameInput = ''
+        }
 
-        const name = !isEmpty(this.state.form.name) ? 'Enter your name!' : '';
-        const email = !isEmpty(this.state.form.email) ? 'Enter your email!' : '';
-        const password = !isEmpty(this.state.form.password) ? 'Enter your password!' : '';
+        let email = '';
+        let colorEmailInput = '';
+        if (!isEmpty(this.state.form.email)) {
+            email = 'Enter your email!';
+            colorEmailInput = 'red';
+        } else {
+            email = '';
+            colorEmailInput = ''
+        }
+
+        let errorMessage = '';
+        let password = '';
+        let colorPasswordInput = '';
+        if (!isEmpty(this.state.form.password)) {
+            password = 'Enter your password!';
+            colorPasswordInput = 'red';
+        } else if (this.state.form.password !== this.state.form.repeatPassword) {
+            errorMessage = 'Passwords do not match!';
+            colorPasswordInput = 'red';
+        } else {
+            password = '';
+            colorPasswordInput = '';
+            errorMessage =  '';
+        }
 
         this.setState({
+            ...this.state,
+            errorMessage: errorMessage,
             errorValidation: {
                 name: name,
                 email: email,
-                password: password
+                password: password,
+
+                colorNameInput: colorNameInput,
+                colorEmailInput: colorEmailInput,
+                colorPasswordInput: colorPasswordInput
             }
         });
 
@@ -67,9 +106,9 @@ export class SignUp extends React.Component {
                     } else return Promise.reject();
                 })
                 .then(response => {
-                        localStorage.setItem('TOKEN', JSON.stringify(response));
-                        this.props.onChangeFlag(true);
-                        customHistory.push('/dashboard');
+                    localStorage.setItem('TOKEN', JSON.stringify(response));
+                    this.props.onChangeFlag(true);
+                    customHistory.push('/dashboard');
                 })
                 .catch(error => {
                     this.setState({
@@ -94,47 +133,59 @@ export class SignUp extends React.Component {
                 </header>
                 <main className={css.main}>
                     <div className={css.form_block}>
-                        <div className={css.title_form}>
-                            Sign Up
+                        <div className={css.form_block_without_error_message}>
+                            <div className={css.title_form}>
+                                Sign Up
+                            </div>
+                            <form className={css.form}
+                                  onSubmit={this.onSubmit}>    {/*Почему onSubmit пишем здесь а не у кнопки, как он понимает к какой из кнопки относится это событие*/}
+                                <div className={css.form_group}>
+                                    <label htmlFor="firstName">First name:</label>
+                                    <input type="text" className={css.form_control}
+                                           style={{borderColor: this.state.errorValidation.colorNameInput}} name='name'
+                                           value={this.state.form.name}
+                                           onChange={this.onChange}
+                                           placeholder="First name"/>
+                                    {this.state.errorValidation.name &&
+                                    <ErrorValidation error={this.state.errorValidation.name}/>}
+                                </div>
+                                <div className={css.form_group}>
+                                    <label htmlFor="email">Email address:</label>
+                                    <input type="text" className={css.form_control}
+                                           style={{borderColor: this.state.errorValidation.colorEmailInput}}
+                                           name='email'
+                                           value={this.state.form.email} onChange={this.onChange}
+                                           placeholder="Email address"/>
+                                    {this.state.errorValidation.email &&
+                                    <ErrorValidation error={this.state.errorValidation.email}/>}
+                                </div>
+                                <div className={css.form_group}>
+                                    <label htmlFor="password">Password:</label>
+                                    <input type="password" className={css.form_control}
+                                           style={{borderColor: this.state.errorValidation.colorPasswordInput}}
+                                           name='password'
+                                           value={this.state.form.password} onChange={this.onChange}
+                                           placeholder="Password"/>
+                                    {this.state.errorValidation.password &&
+                                    <ErrorValidation error={this.state.errorValidation.password}/>}
+                                </div>
+                                <div className={css.form_group}>
+                                    <label htmlFor="repeatPassword">Repeat password:</label>
+                                    <input type="password" className={css.form_control}
+                                           style={{borderColor: this.state.errorValidation.colorPasswordInput}}
+                                           name='repeatPassword'
+                                           value={this.state.form.repeatPassword} onChange={this.onChange}
+                                           placeholder="Repeat password"/>
+                                </div>
+                                <div className={css.buttons}>
+                                    <button type="submit" className={css.btn}>Send</button>
+                                    <button type="submit" className={css.btn}>Cancel</button>
+                                </div>
+                            </form>
                         </div>
-                        <form className={css.form}
-                              onSubmit={this.onSubmit}>    {/*Почему onSubmit пишем здесь а не у кнопки, как он понимает к какой из кнопки относится это событие*/}
-                            <div className={css.form_group}>
-                                <label htmlFor="firstName">First name:</label>
-                                <input type="text" className={css.form_control} name='name' value={this.state.form.name}
-                                       onChange={this.onChange}
-                                       placeholder="First name"/>
-                                {this.state.errorValidation.name &&
-                                <ErrorValidation error={this.state.errorValidation.name}/>}
-                            </div>
-                            <div className={css.form_group}>
-                                <label htmlFor="email">Email address:</label>
-                                <input type="text" className={css.form_control} name='email'
-                                       value={this.state.form.email} onChange={this.onChange}
-                                       placeholder="Email address"/>
-                                {this.state.errorValidation.email &&
-                                <ErrorValidation error={this.state.errorValidation.email}/>}
-                            </div>
-                            <div className={css.form_group}>
-                                <label htmlFor="password">Password:</label>
-                                <input type="password" className={css.form_control} name='password'
-                                       value={this.state.form.password} onChange={this.onChange}
-                                       placeholder="Password"/>
-                                {this.state.errorValidation.password &&
-                                <ErrorValidation error={this.state.errorValidation.password}/>}
-                            </div>
-                            <div className={css.form_group}>
-                                <label htmlFor="repeatPassword">Repeat password:</label>
-                                <input type="password" className={css.form_control} name='repeatPassword'
-                                       value={this.state.form.repeatPassword} onChange={this.onChange}
-                                       placeholder="Repeat password"/>
-                            </div>
-                            <div className={css.buttons}>
-                                <button type="submit" className={css.btn}>Send</button>
-                                <button type="submit" className={css.btn}>Cancel</button>
-                            </div>
+                        <div className={css.block_with_error_message}>
                             {this.state.errorMessage && <ErrorMessage error={this.state.errorMessage}/>}
-                        </form>
+                        </div>
                     </div>
                 </main>
             </div>

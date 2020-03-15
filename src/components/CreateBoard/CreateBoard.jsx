@@ -29,11 +29,16 @@ export class CreateBoard extends React.Component {
             errorValidation: {
                 title: '',
                 key: '',
+                validationColor: '',
+
+                colorTitleInput: '',
+                colorKeyInput: '',
+                colorCategoryInput: '',
+                colorIconInput: ''
             },
             errorMessage: '',
         }
     }
-
 
     componentDidMount() {
         fetch('/dictionaries/categories')
@@ -137,17 +142,31 @@ export class CreateBoard extends React.Component {
         }
 
         let key = '';
+        let colorKeyInput = '';
         if (!isEmpty(this.state.formPost.key)) {
             key = 'Enter your key!';
+            colorKeyInput = 'red';
         } else if (this.state.formPost.key !== this.state.formPost.key.toUpperCase()) {
             key = 'All letters must be uppercase';
+            colorKeyInput = 'red';
         }
-        const title = !isEmpty(this.state.formPost.title) ? 'Enter your title!' : '';
+        let title = '';
+        let colorTitleInput = '';
+        if(!isEmpty(this.state.formPost.title)) {
+            title = 'Enter your title!';
+            colorTitleInput = 'red';
+        } else {
+            title = '';
+            colorTitleInput = ''
+        }
 
         this.setState({
             errorValidation: {
                 title: title,
-                key: key
+                key: key,
+
+                colorKeyInput: colorKeyInput,
+                colorTitleInput: colorTitleInput
             }
         });
 
@@ -195,49 +214,56 @@ export class CreateBoard extends React.Component {
                 </header>
                 <main className={css.main}>
                     <div className={css.form_block}>
-                        <form className={css.form}
-                              onSubmit={this.onSubmit}>    {/*Почему onSubmit пишем здесь а не у кнопки, как он понимает к какой из кнопки относится это событие*/}
-                            <div className={css.form_group}>    {/*Первое поле*/}
-                                <label htmlFor="title">Title:</label>
-                                <input type="text" className={css.form_control} name='title'
-                                       value={this.state.formPost.title}
-                                       onChange={this.onChange}
-                                       placeholder="Title"/>
-                                {this.state.errorValidation.title &&
-                                <ErrorValidation error={this.state.errorValidation.title}/>}
+                        <div className={css.form_block_without_error_message}>
+                            <div className={css.title_form}>
+                                Add Field
                             </div>
-                            <div className={css.form_group}>       {/*Второе поле*/}
-                                <label htmlFor="key">Key:</label>
-                                <input type="text" className={css.form_control} name='key'
-                                       value={this.state.formPost.key} onChange={this.onChange}
-                                       placeholder="Key"/>
-                                {this.state.errorValidation.key &&
-                                <ErrorValidation error={this.state.errorValidation.key}/>}
-                            </div>
-                            <div className={css.form_group}>   {/*Третье поле*/}
-                                <label htmlFor="category">Categories:</label>
-                                <select className={css.form_control} value={this.state.formPost.category.value}
-                                        onChange={this.onChangeCategoryAndIcon} name="category">
-                                    {this.state.formGet.category.map(item => {
-                                        return <option>{item.value}</option>
-                                    })}
-                                </select>
-                            </div>
-                            <div className={css.form_group}>   {/*Четвертое поле*/}
-                                <label htmlFor="icon">Icons:</label>
-                                <select className={css.form_control} value={this.state.formPost.icon.value}
-                                        onChange={this.onChangeCategoryAndIcon} name="icon">
-                                    {this.state.formGet.icon.map(item => {
-                                        return <option>{item.value}</option>
-                                    })}
-                                </select>
-                            </div>
-                            <div className={css.buttons}>
-                                <button type="submit" className={css.btn}>Add</button>
-                                <button type="submit" className={css.btn}>Cancel</button>
-                            </div>
+                            <form className={css.form}
+                                  onSubmit={this.onSubmit}>    {/*Почему onSubmit пишем здесь а не у кнопки, как он понимает к какой из кнопки относится это событие*/}
+                                <div className={css.form_group}>    {/*Первое поле*/}
+                                    <label htmlFor="title">Title:</label>
+                                    <input type="text" className={css.form_control} style={{borderColor: this.state.errorValidation.colorTitleInput}} name='title'
+                                           value={this.state.formPost.title}
+                                           onChange={this.onChange}
+                                           placeholder="Title"/>
+                                    {this.state.errorValidation.title &&
+                                    <ErrorValidation error={this.state.errorValidation.title}/>}
+                                </div>
+                                <div className={css.form_group}>       {/*Второе поле*/}
+                                    <label htmlFor="key">Key:</label>
+                                    <input type="text" className={css.form_control} name='key'
+                                           value={this.state.formPost.key} style={{borderColor: this.state.errorValidation.colorKeyInput}} onChange={this.onChange}
+                                           placeholder="Key"/>
+                                    {this.state.errorValidation.key &&
+                                    <ErrorValidation error={this.state.errorValidation.key}/>}
+                                </div>
+                                <div className={css.form_group}>   {/*Третье поле*/}
+                                    <label htmlFor="category">Categories:</label>
+                                    <select className={css.form_control} style={{borderColor: this.state.errorValidation.colorCategoryInput}} value={this.state.formPost.category.value || ''}
+                                            onChange={this.onChangeCategoryAndIcon} name="category">
+                                        {this.state.formGet.category.map(item => {
+                                            return <option>{item.value}</option>
+                                        })}
+                                    </select>
+                                </div>
+                                <div className={css.form_group}>   {/*Четвертое поле*/}
+                                    <label htmlFor="icon">Icons:</label>
+                                    <select className={css.form_control} style={{borderColor: this.state.errorValidation.colorIconInput}} value={this.state.formPost.icon.value || ''}
+                                            onChange={this.onChangeCategoryAndIcon} name="icon">
+                                        {this.state.formGet.icon.map(item => {
+                                            return <option>{item.value}</option>
+                                        })}
+                                    </select>
+                                </div>
+                                <div className={css.buttons}>
+                                    <button type="submit" className={css.btn}>Add</button>
+                                    <button type="submit" className={css.btn}>Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div className={css.block_with_error_message}>
                             {this.state.errorMessage && <ErrorMessage error={this.state.errorMessage}/>}
-                        </form>
+                        </div>
                     </div>
                 </main>
             </div>

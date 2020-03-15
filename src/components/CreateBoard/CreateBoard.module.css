@@ -27,7 +27,7 @@
 .form_block {
     display: flex;
     flex-direction: column;
-    width: 40%;
+    width: 50%;
     height: 70vh;
     background-color: #eceff1;
     box-shadow: 0 15px 30px 4px rgba(0,0,0,0.5);
@@ -36,7 +36,7 @@
 }
 
 .form {
-    width: 80%;
+    width: 100%;
 }
 
 .form_group {
@@ -90,4 +90,36 @@
 .select_form {
     height: 5vh;
     width: 50%;
+}
+
+.form_block_without_error_message {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+}
+
+.form_block_without_error_message .title_form {
+    width: 100%;
+    font-size: 130%;
+    font-weight: 600;
+    padding: 0 0 2% 0;
+}
+
+.form_block_without_error_message .form {
+    width: 100%;
+}
+
+.form_block_without_error_message .buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 4% 0 0 0;
+
+}
+
+.block_with_error_message {
+    width: 100%;
+    padding: 0 0 5% 0;
 }

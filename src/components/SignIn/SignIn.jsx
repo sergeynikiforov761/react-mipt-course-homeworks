@@ -17,7 +17,10 @@ export class SignIn extends React.Component {
             errorMessage: '',
             errorValidation: {
                 email: '',
-                password: ''
+                password: '',
+
+                colorEmailInput: '',
+                colorPasswordInput: ''
             }
         };
     }
@@ -60,13 +63,33 @@ export class SignIn extends React.Component {
                 });
         }
 
-        const email = !isEmpty(this.state.form.email) ? 'Enter your email!' : '';
-        const password = !isEmpty(this.state.form.password) ? 'Enter your password!' : '';
+        let email = '';
+        let colorEmailInput = '';
+        if(!isEmpty(this.state.form.email)) {
+            email = 'Enter your email!';
+            colorEmailInput = 'red';
+        } else {
+            email = '';
+            colorEmailInput = ''
+        }
+
+        let password = '';
+        let colorPasswordInput = '';
+        if(!isEmpty(this.state.form.password)) {
+            password = 'Enter your password!';
+            colorPasswordInput = 'red';
+        } else {
+            password = '';
+            colorPasswordInput = ''
+        }
 
         this.setState({
             errorValidation: {
                 email: email,
-                password: password
+                password: password,
+
+                colorEmailInput: colorEmailInput,
+                colorPasswordInput: colorPasswordInput
             }
         });
     };
@@ -86,32 +109,36 @@ export class SignIn extends React.Component {
                 </header>
                 <main className={css.main}>
                     <div className={css.form_block}>
-                        <div className={css.title_form}>
-                            Sign In
+                        <div className={css.form_block_without_error_message}>
+                            <div className={css.title_form}>
+                                Sign In
+                            </div>
+                            <form className={css.form} onSubmit={this.onSubmit}>
+                                <div className={css.form_group}>
+                                    <label htmlFor="inputEmail1">Email address:</label>
+                                    <input type="text" className={css.form_control} style={{borderColor: this.state.errorValidation.colorEmailInput}} name='email' value={this.state.email}
+                                           onChange={this.onChange}
+                                           aria-describedby="emailHelp" placeholder="Enter email"/>
+                                    {this.state.errorValidation.email &&
+                                    <ErrorValidation error={this.state.errorValidation.email}/>}
+                                </div>
+                                <div className={css.form_group}>
+                                    <label htmlFor="inputPassword1">Password:</label>
+                                    <input type="password" className={css.form_control} style={{borderColor: this.state.errorValidation.colorPasswordInput}} name='password'
+                                           value={this.state.password} onChange={this.onChange}
+                                           placeholder="Password"/>
+                                    {this.state.errorValidation.email &&
+                                    <ErrorValidation error={this.state.errorValidation.password}/>}
+                                </div>
+                                <div className={css.buttons}>
+                                    <button type="submit" className={css.btn}>Send</button>
+                                    <button type="submit" className={css.btn}>Cancel</button>
+                                </div>
+                            </form>
                         </div>
-                        <form className={css.form} onSubmit={this.onSubmit}>
-                            <div className={css.form_group}>
-                                <label htmlFor="inputEmail1">Email address:</label>
-                                <input type="text" className={css.form_control} name='email' value={this.state.email}
-                                       onChange={this.onChange}
-                                       aria-describedby="emailHelp" placeholder="Enter email"/>
-                                {this.state.errorValidation.email &&
-                                <ErrorValidation error={this.state.errorValidation.email}/>}
-                            </div>
-                            <div className={css.form_group}>
-                                <label htmlFor="inputPassword1">Password:</label>
-                                <input type="password" className={css.form_control} name='password'
-                                       value={this.state.password} onChange={this.onChange}
-                                       placeholder="Password"/>
-                                {this.state.errorValidation.email &&
-                                <ErrorValidation error={this.state.errorValidation.password}/>}
-                            </div>
-                            <div className={css.buttons}>
-                                <button type="submit" className={css.btn}>Send</button>
-                                <button type="submit" className={css.btn}>Cancel</button>
-                            </div>
+                        <div className={css.block_with_error_message}>
                             {this.state.errorMessage && <ErrorMessage error={this.state.errorMessage}/>}
-                        </form>
+                        </div>
                     </div>
                 </main>
             </div>
