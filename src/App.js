@@ -47,8 +47,8 @@ class App extends React.Component {
                         <Redirect to='/dashboard'/>
                     </Switch>}
                     {!this.state.loggedIn && <Switch>
-                        <Route path='/signIn' render={() => <SignIn onChangeFlag={this.onChangeFlag}/>}/>
-                        <Route path='/signUp' render={() => <SignUp onChangeFlag={this.onChangeFlag}/>}/>
+                        <Route path='/signIn' render={() => <SignIn onChangeFlag={this.onChangeFlag} stateFetch={this.state.stateFetch} isFetching={this.isFetching}/>}/>
+                        <Route path='/signUp' render={() => <SignUp onChangeFlag={this.onChangeFlag} stateFetch={this.state.stateFetch} isFetching={this.isFetching}/>}/>
                         <Redirect to='/signIn'/>
                     </Switch>}
                 </div>

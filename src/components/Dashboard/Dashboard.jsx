@@ -3,6 +3,7 @@ import css from "./Dashboard.module.css";
 import {customHistory} from "../../App";
 import {ErrorMessage} from "../Errors/ErrorMessage/ErrorMessage";
 import {Preloader} from "../Preloader/Preloader";
+import {boardGetRequest} from "../../service/board";
 
 export class Dashboard extends React.Component {
     constructor(props) {
@@ -22,15 +23,14 @@ export class Dashboard extends React.Component {
 
     componentDidMount() {
         this.props.isFetching(true);
-        fetch('/board')
-            .then(response => response.json())
+        boardGetRequest()
             .then(response => {
                 this.setState({items: response});
-                setTimeout(() => this.props.isFetching(false), 1000);
+                this.props.isFetching(false);
             })
             .catch(error => {
                 this.setState({errorMessage: error.message});
-                setTimeout(() => this.props.isFetching(false), 1000);
+                this.props.isFetching(false);
             });
     }
 
