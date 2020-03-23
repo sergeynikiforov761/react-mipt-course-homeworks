@@ -1,5 +1,5 @@
 .create_board {
-    width: 100%;
+    width: 100vw;
     height: 100vh;
 }
 
@@ -17,7 +17,8 @@
 }
 
 .main {
-    height: 92vh;
+    width: 100vw;
+    height: 86vh;
     display: flex;
     flex-direction: row;
     justify-content: center;

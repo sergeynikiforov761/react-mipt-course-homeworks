@@ -8,6 +8,7 @@ import {updateTokensRequest} from "../../service/auth";
 import {boardPostRequest} from "../../service/board";
 import {dictionaryRequest} from "../../service/dictionary";
 import {Preloader} from "../Preloader/Preloader";
+import {Footer} from "../Footer/Footer";
 
 export class CreateBoard extends React.Component {
     constructor(props) {
@@ -303,6 +304,7 @@ export class CreateBoard extends React.Component {
                                 </div>
                             </div>
                         </main>
+                        <Footer/>
                     </div>
                 }
             </div>

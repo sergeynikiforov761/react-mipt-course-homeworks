@@ -6,6 +6,7 @@ import {isEmpty} from "../../utils/isEmptyFeild";
 import {ErrorValidation} from "../Errors/ErrorValidation/ErrorValidation";
 import {signUpRequest} from "../../service/auth";
 import {Preloader} from "../Preloader/Preloader";
+import {Footer} from "../Footer/Footer";
 
 export class SignUp extends React.Component {
     constructor(props) {
@@ -202,6 +203,7 @@ export class SignUp extends React.Component {
                                 </div>
                             </div>
                         </main>
+                        <Footer/>
                     </div>
                 }
             </div>
