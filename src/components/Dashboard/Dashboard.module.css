@@ -53,14 +53,14 @@
 }
 
 .previous_next {
-    width: 50%;
+    width: 310px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
 .add_field {
-    width: 100%;
+    width: 100px;
 }
 
 .td_img {
@@ -86,16 +86,26 @@
 }
 
 .btn_prev {
-    padding-right: 10%;
+    padding-right: 20px;
 }
 
 .btn_next {
-    padding-left: 10%;
+    padding-left: 20px;
 }
 
 .btn {
     width: 140px;
-    height: 5vh;
+    height: 50px;
     box-shadow: 0 5px 10px 2px rgba(0,0,0,0.5);
     font-weight: 600;
+}
+
+thead {
+    height: 50px;
+    border-bottom: 2px darkgray inset;
+}
+
+tr {
+  height: 60px;
+    border-top: 1px gainsboro inset;
 }

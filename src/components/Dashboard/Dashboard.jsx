@@ -53,9 +53,9 @@ export class Dashboard extends React.Component {
                         </header>
                         <main className={css.main}>
                             <div className={css.buttons_and_table}>
-                                <table className={'table' + ' ' + css.table}>
+                                <table className={css.table}>
                                     <thead>
-                                    <tr className="table-active">
+                                    <tr>
                                         <th></th>
                                         <th>Title</th>
                                         <th>Owner</th>
@@ -69,10 +69,10 @@ export class Dashboard extends React.Component {
                                             <td className={css.td_img}>
                                                 <img className={css.img} src={item.icon.value}/>
                                             </td>
-                                            <td>{item.title}</td>
-                                            <td>{item.owner.name}</td>
-                                            <td>{item.key}</td>
-                                            <td>{item.category.value}</td>
+                                            <td style={{width: '300px'}}>{item.title}</td>
+                                            <td style={{width: '120px'}}>{item.owner.name}</td>
+                                            <td style={{width: '100px'}}>{item.key}</td>
+                                            <td style={{width: '200px'}}>{item.category.value}</td>
                                         </tr>
 
                                     })}
