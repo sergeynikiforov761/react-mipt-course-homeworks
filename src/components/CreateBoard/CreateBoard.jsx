@@ -119,6 +119,7 @@ export class CreateBoard extends React.Component {
     };
 
     checkLifeToken = (getToken) => {
+        console.log(getToken.accessTokenExpiresIn > Date.now());
         if (getToken.accessTokenExpiresIn > Date.now()) {
             return Promise.resolve();
         } else {
@@ -284,10 +285,8 @@ export class CreateBoard extends React.Component {
                                                     style={{borderColor: this.state.errorValidation.colorIconInput}}
                                                     value={this.state.formPost.icon.value || ''}
                                                     onChange={this.onChangeCategoryAndIcon} name="icon">
-                                                <option value={''} disabled>Select icon
-                                                </option>
+                                                <option value={''} disabled>Select icon</option>
                                                 {this.state.formGet.icon.map(item => {
-                                                    console.log(item.value);
                                                     return <option>{item.value}</option>
                                                 })}
                                             </select>

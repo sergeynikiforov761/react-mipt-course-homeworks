@@ -5,6 +5,7 @@ import {ErrorMessage} from "../Errors/ErrorMessage/ErrorMessage";
 import {Preloader} from "../Preloader/Preloader";
 import {boardGetRequest} from "../../service/board";
 import {Footer} from "../Footer/Footer";
+import {nextIcon, previousIcon} from "../../images/svg";
 
 export class Dashboard extends React.Component {
     constructor(props) {
@@ -55,7 +56,7 @@ export class Dashboard extends React.Component {
                             <div className={css.buttons_and_table}>
                                 <table className={css.table}>
                                     <thead>
-                                    <tr>
+                                    <tr className={css.tr_head}>
                                         <th></th>
                                         <th>Title</th>
                                         <th>Owner</th>
@@ -65,7 +66,7 @@ export class Dashboard extends React.Component {
                                     </thead>
                                     <tbody>
                                     {this.state.items.slice(this.state.page * this.state.amount, (this.state.page + 1) * this.state.amount).map(item => {
-                                        return <tr>
+                                        return <tr className={css.tr_body} onClick={() => (customHistory.push(customHistory.push('/tasks')))}>
                                             <td className={css.td_img}>
                                                 <img className={css.img} src={item.icon.value}/>
                                             </td>
@@ -93,18 +94,7 @@ export class Dashboard extends React.Component {
                                                     this.setState({page: Math.max(this.state.page - 1, 0)})
                                                 }}>
                                             <div className={css.svg_prev_next}>
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    x="0"
-                                                    y="0"
-                                                    enableBackground="new 0 0 477.175 477.175"
-                                                    version="1.1"
-                                                    viewBox="0 0 477.175 477.175"
-                                                    xmlSpace="preserve"
-                                                >
-                                                    <path
-                                                        d="M145.188 238.575l215.5-215.5c5.3-5.3 5.3-13.8 0-19.1s-13.8-5.3-19.1 0l-225.1 225.1c-5.3 5.3-5.3 13.8 0 19.1l225.1 225c2.6 2.6 6.1 4 9.5 4s6.9-1.3 9.5-4c5.3-5.3 5.3-13.8 0-19.1l-215.4-215.5z"></path>
-                                                </svg>
+                                                {previousIcon()}
                                             </div>
                                             <div>
                                                 Previous
@@ -118,18 +108,7 @@ export class Dashboard extends React.Component {
                                                 Next
                                             </div>
                                             <div className={css.svg_prev_next}>
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    x="0"
-                                                    y="0"
-                                                    enableBackground="new 0 0 477.175 477.175"
-                                                    version="1.1"
-                                                    viewBox="0 0 477.175 477.175"
-                                                    xmlSpace="preserve"
-                                                >
-                                                    <path
-                                                        d="M360.731 229.075l-225.1-225.1c-5.3-5.3-13.8-5.3-19.1 0s-5.3 13.8 0 19.1l215.5 215.5-215.5 215.5c-5.3 5.3-5.3 13.8 0 19.1 2.6 2.6 6.1 4 9.5 4 3.4 0 6.9-1.3 9.5-4l225.1-225.1c5.3-5.2 5.3-13.8.1-19z"></path>
-                                                </svg>
+                                                {nextIcon()}
                                             </div>
                                         </button>
                                     </div>

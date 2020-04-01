@@ -7,6 +7,7 @@ import {SignIn} from "./components/SignIn/SignIn";
 import {SignUp} from "./components/SignUp/SignUp";
 import {CreateBoard} from "./components/CreateBoard/CreateBoard";
 import {Preloader} from "./components/Preloader/Preloader";
+import {Tasks} from "./components/Tasks/Tasks";
 
 export const customHistory = createBrowserHistory();
 
@@ -46,6 +47,8 @@ class App extends React.Component {
                                                                           stateFetch={this.state.stateFetch}
                                                                           isFetching={this.isFetching}/>}/>
                         <Route path='/createBoard' render={() => <CreateBoard stateFetch={this.state.stateFetch}
+                                                                              isFetching={this.isFetching}/>}/>
+                        <Route path='/tasks' render={() => <Tasks stateFetch={this.state.stateFetch}
                                                                               isFetching={this.isFetching}/>}/>
                         <Redirect to='/dashboard'/>
                     </Switch>}
