@@ -12,7 +12,8 @@ const Header = () => {
             </th>
             <th  style={{textAlign: 'right'}}>
                 <div>
-                    <a href="/login">Login</a>|<a href="/register">Register</a>
+                    <NavLink to="/login" activeClassName="active">Login</NavLink>|<NavLink to="/register" activeClassName="active">Register</NavLink>
+                    {/*<a href="/login">Login</a>|<a href="/register">Register</a>*/}
                 </div>
             </th>
         </table>
