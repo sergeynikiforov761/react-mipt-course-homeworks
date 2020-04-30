@@ -22,12 +22,12 @@
 }
 
 .svg_block {
-    animation: animate .7s ease-in-out;
+    animation: animate .5s ease-in-out;
 }
 
 .svg_block .block {
     display: none;
-    animation: animate .7s ease-in-out;
+    animation: animate .5s ease-in-out;
 }
 
 .svg_block:hover .block {

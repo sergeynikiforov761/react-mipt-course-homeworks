@@ -7,6 +7,7 @@ import {SignIn} from "./components/SignIn/SignIn";
 import {SignUp} from "./components/SignUp/SignUp";
 import {CreateBoard} from "./components/CreateBoard/CreateBoard";
 import {Preloader} from "./components/Preloader/Preloader";
+import {Tasks} from "./components/Tasks/Tasks";
 
 export const customHistory = createBrowserHistory();
 
@@ -22,7 +23,7 @@ class App extends React.Component {
 
     componentDidMount() {
         const token = localStorage.getItem("TOKEN");
-        if(token) {
+        if (token) {
             this.onChangeFlag(true);
         }
     }
@@ -42,13 +43,22 @@ class App extends React.Component {
             <Router history={customHistory}>
                 <div className={css.main}>
                     {this.state.loggedIn && <Switch>
-                        <Route path='/dashboard' render={() => <Dashboard onChangeFlag={this.onChangeFlag} stateFetch={this.state.stateFetch} isFetching={this.isFetching}/>}/>
-                        <Route path='/createBoard' render={() => <CreateBoard stateFetch={this.state.stateFetch} isFetching={this.isFetching}/>}/>
+                        <Route path='/dashboard' render={() => <Dashboard onChangeFlag={this.onChangeFlag}
+                                                                          stateFetch={this.state.stateFetch}
+                                                                          isFetching={this.isFetching}/>}/>
+                        <Route path='/createBoard' render={() => <CreateBoard stateFetch={this.state.stateFetch}
+                                                                              isFetching={this.isFetching}/>}/>
+                        <Route path='/tasks' render={() => <Tasks stateFetch={this.state.stateFetch}
+                                                                              isFetching={this.isFetching}/>}/>
                         <Redirect to='/dashboard'/>
                     </Switch>}
                     {!this.state.loggedIn && <Switch>
-                        <Route path='/signIn' render={() => <SignIn onChangeFlag={this.onChangeFlag}/>}/>
-                        <Route path='/signUp' render={() => <SignUp onChangeFlag={this.onChangeFlag}/>}/>
+                        <Route path='/signIn'
+                               render={() => <SignIn onChangeFlag={this.onChangeFlag} stateFetch={this.state.stateFetch}
+                                                     isFetching={this.isFetching}/>}/>
+                        <Route path='/signUp'
+                               render={() => <SignUp onChangeFlag={this.onChangeFlag} stateFetch={this.state.stateFetch}
+                                                     isFetching={this.isFetching}/>}/>
                         <Redirect to='/signIn'/>
                     </Switch>}
                 </div>
