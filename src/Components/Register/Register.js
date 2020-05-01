@@ -3,7 +3,7 @@ import {Field, Form, reduxForm} from "redux-form";
 import {Input} from "../common/FormsControls/FormsContorls";
 import {required,minLenghtCreator,validateEmail,match} from "../../utils/validators/validators";
 
-
+// 0
 const minLengthCreator3 = minLenghtCreator(3);
 const minLengthCreator8 = minLenghtCreator(8);
 
