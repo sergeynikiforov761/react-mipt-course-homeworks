@@ -1,37 +1,47 @@
 import React from "react";
 import './App.css';
 
-import {Login} from "./Components/Login/Login";
-import {Register} from "./Components/Register/Register";
+
 import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import Header from "./Components/Header/Header";
 import Footer from "./Components/Footer/Footer";
+import RegisterContainer from "./Components/Register/RegisterContainer";
+import LoginContainer from "./Components/Login/LoginContainer";
+import store from "./redux/redux-store";
 
 
-function App() {
 
-    const auth = "";
-    return (
+class App extends React.Component {
 
-
-        <Router>
-
-            <div className='app-wrapper'>
+    constructor(props) {
+        super(props);
 
 
-                    <Header />
+        this.state = {
+            tokens: store.getState().auth.isAuth || null
+        }
+    }
 
 
-                    {!auth && <Switch>
-                        <Route path='/login'
-                               render={() => <Login padding='5' margin='1'/>}/>
-                        <Route path="/register" component={Register}/>
 
+    render() {
+        const {tokens} = false//store.getState().isAuth;
+        return (
+
+            <Router>
+
+                <div className='app-wrapper'>
+
+                    <Header/>
+
+                    {!tokens && <Switch>
+                        <Route path='/login' component={LoginContainer}/>
+                        <Route path="/register" component={RegisterContainer}/>
                         <Redirect to="/login"/>
                     </Switch>}
 
-                    {!!auth && <Switch>
+                    {!!tokens && <Switch>
 
                         <Route path="/" component={Dashboard}/>
                         <Redirect to="/"/>
@@ -41,11 +51,11 @@ function App() {
 
                     <Footer/>
 
-            </div>
-        </Router>
+                </div>
+            </Router>
+        )
 
-
-    );
+    }
 }
 
 export default App;

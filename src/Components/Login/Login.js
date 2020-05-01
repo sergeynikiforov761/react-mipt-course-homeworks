@@ -1,47 +1,44 @@
 import React from 'react';
-import {Paper, withStyles, Grid, TextField, Button, FormControlLabel, Checkbox} from '@material-ui/core';
-import {Face, Fingerprint} from '@material-ui/icons'
+import {Field, Form, reduxForm} from "redux-form";
+import {required, maxLenghtCreator} from "../../utils/validators/validators";
+import {Input} from "../common/FormsControls/FormsContorls";
 
-const styles = theme => ({
-    margin: {
-        margin: theme.spacing.unit * 2,
-    },
-    padding: {
-        padding: theme.spacing.unit
-    }
-});
+const maxLenghtCreator10 = maxLenghtCreator(10);
+const LoginForm = (props) => {
 
-export class Login extends React.Component {
-    render() {
-        const {classes} = this.props;
-        return (
-            <Paper className={this.props.padding}>
-                <div className={this.props.margin}>
-                    <Grid container spacing={8} alignItems="flex-end">
-                        <Grid item>
-                            <Face/>
-                        </Grid>
-                        <Grid item md={true} sm={true} xs={true}>
-                            <TextField id="username" label="Username" type="email" fullWidth autoFocus required/>
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={8} alignItems="flex-end">
-                        <Grid item>
-                            <Fingerprint/>
-                        </Grid>
-                        <Grid item md={true} sm={true} xs={true}>
-                            <TextField id="password" label="Password" type="password" fullWidth required/>
-                        </Grid>
-                    </Grid>
-                    <Grid container alignItems="center" justify="space-between">
+    return (
+        <Form onSubmit={props.handleSubmit}>
+            <div>
+                <Field placeholder={"Login"} name={"login"} component = {Input}
+                validate ={[required, maxLenghtCreator10]} />
+            </div>
 
+            <div>
+                <Field placeholder={"Password"} name={"password"}  component = {Input}
+                       validate ={[required]}/>
+            </div>
 
-                    </Grid>
-                    <Grid container justify="center" style={{marginTop: '10px'}}>
-                        <Button variant="outlined" color="primary" style={{textTransform: "none"}}>Login</Button>
-                    </Grid>
-                </div>
-            </Paper>
-        );
-    }
+            <div>
+                <button>Login</button>
+            </div>
+
+        </Form>
+    )
 }
+
+let LoginReduxForm = reduxForm({form: 'login' })(LoginForm)
+
+const Login = (props) => {
+
+    const onSubmit = (formData) => {
+        console.log(formData);
+    }
+    return (
+        <div>
+            <h1>Login</h1>
+            <LoginReduxForm onSubmit={onSubmit}/>
+        </div>
+    )
+}
+
+export default Login;
