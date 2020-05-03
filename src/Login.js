@@ -1,4 +1,6 @@
 import React from "react";
+import {Register} from "./Register";
+import {Route} from "react-router-dom";
 
 export class Login extends React.Component {
     constructor(props) {
@@ -35,7 +37,15 @@ export class Login extends React.Component {
                     </span>
                     <input name="password" value={this.state.password} onChange={this.onChange}/>
                 </div>
-                <button onClick={this.onClick}>Click me</button>
+                <button onClick={this.onClick}>Log in</button>
+                <Route render={({ history}) => (
+                    <button
+                        onClick={() => { history.push('/register') }}
+                    >
+                        Sign up
+                    </button>
+                )} />
+
             </div>
         );
     }

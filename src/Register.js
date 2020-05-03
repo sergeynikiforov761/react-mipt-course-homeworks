@@ -1,4 +1,6 @@
 import React from "react";
+import axios from 'axios'
+import {Route} from "react-router-dom";
 import {validateAll} from 'indicative/validator';
 
 export class Register extends React.Component {
@@ -31,6 +33,14 @@ export class Register extends React.Component {
         }
         validateAll(data, rules, messages)
             .then(() => {
+                this.setState({errors: {}});
+                axios.post("http://httpbin.org/post", this.state)
+                    .then(responce =>{
+                        console.log(responce);
+                    })
+                    .catch(error=>{
+                        console.log(error);
+                    })
                 console.log("all right")
             })
             .catch(errors => {
@@ -40,7 +50,6 @@ export class Register extends React.Component {
                 this.setState({errors: formatter})
                 // console.log(this.state.errors.login)
             })
-
     };
 
     onChange = (event) => {
@@ -61,7 +70,7 @@ export class Register extends React.Component {
                 </div>
                 <div>
                     {this.state.errors.login &&
-                    <span className='error' style={{ color: 'red' }}>{this.state.errors.login}</span>}
+                    <span className='error' style={{color: 'red'}}>{this.state.errors.login}</span>}
                 </div>
                 <div>
                     <span>
@@ -71,7 +80,7 @@ export class Register extends React.Component {
                 </div>
                 <div>
                     {this.state.errors.email &&
-                    <span className='error' style={{ color: 'red' }}>{this.state.errors.email}</span>}
+                    <span className='error' style={{color: 'red'}}>{this.state.errors.email}</span>}
                 </div>
                 <div>
                     <span>
@@ -81,7 +90,7 @@ export class Register extends React.Component {
                 </div>
                 <div>
                     {this.state.errors.password &&
-                    <span className='error' style={{ color: 'red' }}>{this.state.errors.password}</span>}
+                    <span className='error' style={{color: 'red'}}>{this.state.errors.password}</span>}
                 </div>
                 <div>
                     <span>
@@ -90,6 +99,13 @@ export class Register extends React.Component {
                     <input name="password_confirmation" value={this.state.repeatPassword} onChange={this.onChange}/>
                 </div>
                 <button onClick={this.onClick}>Click me</button>
+                <Route render={({ history}) => (
+                    <button
+                        onClick={() => { history.push('/login') }}
+                    >
+                        Log in
+                    </button>
+                )} />
             </div>
         );
     }
