@@ -11,7 +11,7 @@ const RegisterForm = (props) => {
     return(
         <Form onSubmit={props.handleSubmit}>
             <div>
-                <Field placeholder={"Login"} name={"login"} component = {Input}
+                <Field placeholder={"Name"} name={"name"} component = {Input}
                        validate ={[required,minLengthCreator3]} />
             </div>
             <div>
@@ -21,11 +21,11 @@ const RegisterForm = (props) => {
 
             <div>
                 <Field placeholder={"Password"} name={"password"}  component = {Input} type="password"
-                       validate ={[required,minLengthCreator8]}/>
+                       validate ={[required,minLengthCreator3]}/>
             </div>
             <div>
                 <Field placeholder={"Confirm Password"} name={"confirmPassword"}  component = {Input} type="password"
-                       validate ={[required,minLengthCreator8,match("password")]}/>
+                       validate ={[required,minLengthCreator3,match("password")]}/>
             </div>
 
             <div>

@@ -42,5 +42,6 @@
   },
   "devDependencies": {
     "axios": "^0.19.2"
-  }
+  },
+  "proxy": "https://react-mipt-course-server.herokuapp.com"
 }

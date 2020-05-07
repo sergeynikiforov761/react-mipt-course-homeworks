@@ -2,13 +2,18 @@ import React from "react";
 import './App.css';
 
 
-import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
-import Dashboard from "./Components/Dashboard/Dashboard";
-import Header from "./Components/Header/Header";
+import {BrowserRouter as Router, Route, Switch, Redirect, withRouter} from "react-router-dom";
+
+
 import Footer from "./Components/Footer/Footer";
 import RegisterContainer from "./Components/Register/RegisterContainer";
 import LoginContainer from "./Components/Login/LoginContainer";
 import store from "./redux/redux-store";
+import DashboardContainer from "./Components/Dashboard/DashboardContainer";
+import HeaderContainer from "./Components/Header/HeaderContainer";
+import {connect} from "react-redux";
+import {getAuthUserData} from "./redux/auth-reducer";
+import {compose} from "redux";
 
 
 
@@ -19,32 +24,32 @@ class App extends React.Component {
 
 
         this.state = {
-            tokens: store.getState().auth.isAuth || null
+            isAuth: store.getState().auth.isAuth || null
         }
     }
 
 
 
     render() {
-        const {tokens} = false//store.getState().isAuth;
+        const {isAuth} = this.state;
         return (
 
             <Router>
 
                 <div className='app-wrapper'>
 
-                    <Header/>
+                    <HeaderContainer/>
 
-                    {!tokens && <Switch>
+                    {!isAuth && <Switch>
                         <Route path='/login' component={LoginContainer}/>
                         <Route path="/register" component={RegisterContainer}/>
+                        <Route path="/dashboard/:boardId?" component={DashboardContainer}/>
                         <Redirect to="/login"/>
                     </Switch>}
 
-                    {!!tokens && <Switch>
+                    {!!isAuth && <Switch>
 
-                        <Route path="/" component={Dashboard}/>
-                        <Redirect to="/"/>
+
 
                     </Switch>}
 
@@ -58,4 +63,6 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default compose(
+    withRouter,
+    connect(null, getAuthUserData()))(App);
