@@ -19,10 +19,12 @@ function Registration(props) {
             if (password !== checkPassword) {
                 alert("Passwords don't match");
             } else {
-                axios.post("auth/registration", {
-                    userName,
-                    email,
-                    password
+                axios.post("/auth/register", {
+                    name: userName.toString(),
+                    email: email.toString(),
+                    password: password.toString(),
+                }, {
+                    'content-type': 'application/json'
                 }).then(result => {
                     if (result.status === 200) {
                         setAuthTokens(result.data);

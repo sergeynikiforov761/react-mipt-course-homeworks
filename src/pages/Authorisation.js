@@ -11,12 +11,14 @@ function Authorisation(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setAuthTokens } = useAuth();
-  const referer = props.location.state.referer || '/';
+  const referer = '/';
 
   function postAuthorisation() {
     axios.post("/auth/login", {
       email,
       password
+    },{
+      'content-type': 'application/json'
     }).then(result => {
       if (result.status === 200) {
         setAuthTokens(result.data);
