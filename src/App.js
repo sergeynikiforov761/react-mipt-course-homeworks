@@ -1,50 +1,68 @@
 import React from "react";
 import './App.css';
 
-import TypoGraphy from '@material-ui/core/Typography'
 
-import {Login} from "./Components/Login/Login";
-import {Register} from "./Components/Register/Register";
-import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
-import Dashboard from "./Components/Dashboard/Dashboard";
-import Header from "./Components/Header/Header";
+import {BrowserRouter as Router, Route, Switch, Redirect, withRouter} from "react-router-dom";
+
+
 import Footer from "./Components/Footer/Footer";
+import RegisterContainer from "./Components/Register/RegisterContainer";
+import LoginContainer from "./Components/Login/LoginContainer";
+import store from "./redux/redux-store";
+import DashboardContainer from "./Components/Dashboard/DashboardContainer";
+import HeaderContainer from "./Components/Header/HeaderContainer";
+import {connect} from "react-redux";
+import {getAuthUserData} from "./redux/auth-reducer";
+import {compose} from "redux";
 
 
-function App() {
-    const auth = localStorage.getItem('AUTH');
 
-    return (
-        <div className='app-wrapper'>
+class App extends React.Component {
 
-
-            <div className='app-wrapper-content'>
+    constructor(props) {
+        super(props);
 
 
+        this.state = {
+            isAuth: store.getState().auth.isAuth || null
+        }
+    }
+
+
+
+    render() {
+        const {isAuth} = this.state;
+        return (
 
             <Router>
-                {!auth && <Switch>
-                    {/*<Route path="/login" component={Login}/>*/}
-                    <Route path='/login'
-                           render={() => <Login padding='5' margin='1'/>}
-                    />
-                    <Route path="/dashboards" component={Dashboard}/>
 
-                    <Redirect to="/login"/>
-                </Switch>}
-                {!!auth && <Switch>
-                    <Route path="/register" component={Register}/>
-                    <Route exact path="/" component={Login}/>
-                    <Redirect to="/"/>
-                </Switch>}
+                <div className='app-wrapper'>
+
+                    <HeaderContainer/>
+
+                    {!isAuth && <Switch>
+                        <Route path='/login' component={LoginContainer}/>
+                        <Route path="/register" component={RegisterContainer}/>
+                        <Route path="/dashboard/:boardId?" component={DashboardContainer}/>
+                        <Redirect to="/login"/>
+                    </Switch>}
+
+                    {!!isAuth && <Switch>
+
+
+
+                    </Switch>}
+
+
+                    <Footer/>
+
+                </div>
             </Router>
+        )
 
-            </div>
-
-            <Footer/>
-            <Header/>
-        </div>
-    );
+    }
 }
 
-export default App;
+export default compose(
+    withRouter,
+    connect(null, getAuthUserData()))(App);

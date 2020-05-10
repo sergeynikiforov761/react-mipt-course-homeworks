@@ -2,7 +2,8 @@ import React from 'react';
 import s from './Header.module.css'
 import {NavLink} from "react-router-dom";
 
-const Header = () => {
+
+const Header = (props) => {
     return <header className={s.header}>
         <table style={{width:'100%'}}>
             <th>
@@ -12,7 +13,12 @@ const Header = () => {
             </th>
             <th  style={{textAlign: 'right'}}>
                 <div>
-                    <a href="/login">Login</a>|<a href="/register">Register</a>
+                    {props.isAuth
+                        ? <NavLink to="/logout" activeClassName="active">Logout</NavLink>
+                        : <NavLink to="/register" activeClassName="active">Register</NavLink>
+                        }
+
+
                 </div>
             </th>
         </table>

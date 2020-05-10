@@ -1,55 +1,58 @@
 import React from 'react';
-import { Paper, withStyles, Grid, TextField, Button, FormControlLabel, Checkbox } from '@material-ui/core';
-import { Face, Fingerprint } from '@material-ui/icons'
-const styles = theme => ({
-    margin: {
-        margin: theme.spacing.unit * 2,
-    },
-    padding: {
-        padding: theme.spacing.unit
-    }
-});
-export class Login extends React.Component {
-    render() {
-        const { classes } = this.props;
-        return (
-            <Paper className={this.props.padding}>
-                <div className={this.props.margin}>
-                    <Grid container spacing={8} alignItems="flex-end">
-                        <Grid item>
-                            <Face />
-                        </Grid>
-                        <Grid item md={true} sm={true} xs={true}>
-                            <TextField id="username" label="Username" type="email" fullWidth autoFocus required />
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={8} alignItems="flex-end">
-                        <Grid item>
-                            <Fingerprint />
-                        </Grid>
-                        <Grid item md={true} sm={true} xs={true}>
-                            <TextField id="password" label="Password" type="password" fullWidth required />
-                        </Grid>
-                    </Grid>
-                    <Grid container alignItems="center" justify="space-between">
-                        <Grid item>
-                            <FormControlLabel control={
-                                <Checkbox
-                                    color="primary"
-                                />
-                            } label="Remember me" />
-                        </Grid>
-                        <Grid item>
-                            <Button disableFocusRipple disableRipple style={{ textTransform: "none" }} variant="text" color="primary">Forgot password ?</Button>
-                        </Grid>
-                    </Grid>
-                    <Grid container justify="center" style={{ marginTop: '10px' }}>
-                        <Button variant="outlined" color="primary" style={{ textTransform: "none" }}>Login</Button>
-                    </Grid>
-                </div>
-            </Paper>
-        );
-    }
+import {Field, Form, reduxForm} from "redux-form";
+import {required} from "../../utils/validators/validators";
+import {Input} from "../common/FormsControls/FormsContorls";
+import {Redirect} from "react-router-dom";
+import {connect} from "react-redux";
+import style from "./../common/FormsControls/FormsControls.module.css"
+
+const LoginForm = (props) => {
+
+    return (
+        <Form onSubmit={props.handleSubmit}>
+            <div>
+                <Field placeholder={"Email"} name={"email"} component={Input}
+                       validate={[required]}/>
+            </div>
+
+            <div>
+                <Field placeholder={"Password"} name={"password"} component={Input} type="password"
+                       validate={[required]}/>
+            </div>
+
+            <div>
+                <button>Login</button>
+            </div>
+
+            {props.error && <div className={style.formSummaryError}>
+                {props.error}
+            </div>
+            }
+        </Form>
+    )
 }
 
-export default withStyles(styles)(Login);
+let LoginReduxForm = reduxForm({form: 'login'})(LoginForm)
+
+const Login = (props) => {
+
+    const onSubmit = ({email, password}) => {
+        props.getloginUser(email, password);
+    };
+
+    if (props.isAuth) {
+        return <Redirect to={"/dashboard"}/>
+    }
+
+    return (
+        <div>
+            <h1>Login</h1>
+            <LoginReduxForm onSubmit={onSubmit}/>
+        </div>
+    )
+}
+const mapStateToProps = (state) => ({
+    isAuth: state.isAuth
+})
+
+export default connect(mapStateToProps, {Login})(Login);
