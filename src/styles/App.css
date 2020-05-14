@@ -1,0 +1,17 @@
+.App {
+    background: linear-gradient(to top left, #ffffcc 0%, #ffccff 100%);
+    display: table;
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.Main {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    margin-top: 10%;
+}

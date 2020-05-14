@@ -1,0 +1,44 @@
+.MainBoard{
+    height: 30em;
+    text-align: center !important;
+    position: relative;
+}
+
+.Card{
+    border-radius: 40px;
+    width: 30em !important;
+    background: radial-gradient(circle, rgba(166,63,251,0.4770950616574755) 0%, rgba(70,123,252,0.5331174706210609) 100%);
+}
+
+.Typography{
+    border: 1px solid rgba(174, 78, 255, 0.64);
+    border-radius: 20px;
+    background-color: #d7c1ff;
+}
+
+.TypographyLocal{
+    border-top: 1px solid rgba(174, 78, 255, 0.64);
+    border-bottom: 1px solid rgba(174, 78, 255, 0.64);
+    background-color: #d7c1ff;
+}
+
+.TypographyLocalBottom{
+    border-bottom: 1px solid rgba(174, 78, 255, 0.64);
+    background-color: #d7c1ff;
+}
+
+.LogOutButton{
+    text-align: left;
+}
+
+.CreateNewForm{
+    padding-bottom: 0.5em;
+}
+
+.CreateNewFormConfirmButton{
+    margin-right: 0.75em !important;
+}
+
+.CancelButton{
+    margin-left: 0.75em !important;
+}
