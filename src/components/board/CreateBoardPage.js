@@ -15,10 +15,8 @@ class CreateBoardPageComponent extends Component {
         this.state = {
             title: '',
             key: '',
-            categoryValue: '',
-            categoryKey: '',
-            iconValue: '',
-            iconKey: '',
+            category: '',
+            icon: '',
             categoryList: [],
             iconList: []
         }
@@ -49,60 +47,58 @@ class CreateBoardPageComponent extends Component {
         }).catch(err => {
             console.log(err);
         });
-    }
+    };
 
     onChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
         });
-    }
+    };
 
     onChangeSelectCategory = (event) => {
         this.setState({
-            categoryValue: event.target.value.value,
-            categoryKey: event.target.value.key
+            category: event.target.value
         });
-    }
+    };
 
     onChangeSelectIcon = (event) => {
         this.setState({
-            iconValue: event.target.value.value,
-            iconKey: event.target.value.key
-        },  []);
-        console.log(this.state);
+            icon: event.target.value,
+        });
     }
 
     render() {
         const {loading} = this.props;
-        const {categoryList, iconList, iconValue} = this.state;
-        const proxy = "https://react-mipt-course-server.herokuapp.com";
+        const {categoryList, iconList} = this.state;
         return <div>
-            {!loading ? <div>
+            {!loading && <>
                 <div>
-                    <TextField name="title" label="Title" variant="filled" value={this.state.title}
+                    <div>
+                        <TextField name="title" label="Title" variant="filled" value={this.state.title}
+                                   onChange={this.onChange}/>
+                    </div>
+                </div>
+                <div>
+                    <TextField name="key" label="Key" variant="filled" value={this.state.key}
                                onChange={this.onChange}/>
                 </div>
-            </div> : null}
-            {!loading ? <div>
-                <TextField name="key" label="Key" variant="filled" value={this.state.key}
-                           onChange={this.onChange}/>
-            </div> : null}
-            {!loading ?
-                <Select value={this.state.categoryValue} onChange={this.onChangeSelectCategory}>
-                    {categoryList.map(categoryList => {
-                        return (
-                            <MenuItem value={categoryList} key={categoryList.key}>{categoryList.value}</MenuItem>)
-                    })}
-                </Select> : null}
-            {!loading ?
-                <Select value={this.state.iconKey} onChange={this.onChangeSelectIcon}>
-                    {iconList.map(iconList => {
-                        return (
-                            <MenuItem value={iconList} key={iconList.key}>{iconList.key}</MenuItem>)
-                    })}
-                </Select> : null}
-            {iconValue !== '' ? <img src={`${proxy}${this.state.iconValue}`} alt="new"> </img> : null}
-            {!loading ? <div>
+                <div>
+                    <Select value={this.state.category} onChange={this.onChangeSelectCategory}>
+                        {categoryList.map(category => {
+                            return (
+                                <MenuItem value={category} key={category.key}>{category.value}</MenuItem>)
+                        })}
+                    </Select>
+                </div>
+                <div>
+                    <Select value={this.state.icon} onChange={this.onChangeSelectIcon}>
+                        {iconList.map(icon => (
+                            <MenuItem value={icon} key={icon.key}>
+                                <img width={48} height={48} src={icon.value}/>
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </div>
                 <Button className="CreateNewFormConfirmButton" onClick={this.onClick} variant="contained"
                         color="primary">Create</Button>
                 <Route render={({history}) => (
@@ -112,10 +108,10 @@ class CreateBoardPageComponent extends Component {
                         Cancel
                     </Button>
                 )}/>
-            </div> : null}
+            </>}
             <PageWrapper loading={loading}/>
         </div>
     }
 }
 
-export const CreateBoardPage = withLoading(CreateBoardPageComponent)
+export const CreateBoardPage = withLoading(CreateBoardPageComponent);
